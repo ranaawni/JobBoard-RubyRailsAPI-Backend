@@ -12,12 +12,13 @@ Rails.application.routes.draw do
   delete '/deletecategories/:id', to: "categories#destroy" #edit one category
 
   #Jobs Routes
-  get '/jobs', to: "jobs#index"                #get jobs rout
-  post '/createjobs', to: "jobs#index"                #create new job rout
-  put '/editjobs/:id', to: "jobs#update"       #route for edit one job
-  get '/:id/jobs', to: "applieds#index"       #route to get all jobs in seeker page (First page)
-  get '/:id/appliedjobs', to: "applieds#index"       #route to get applied jobs for seeker  
-  post '/:id/jobs/apply', to: "applieds#create"       #route to create applied job 
+  get '/:id/jobs', to: "jobs#index"                     #get jobs rout
+  post '/:id/createjobs', to: "jobs#create"              #create new job rout
+  put '/:userid/editjobs/:id', to: "jobs#update"            #route for edit one job
+
+  get '/:id/jobs', to: "applieds#index"             #route to get all jobs in seeker page (First page)
+  get '/:id/appliedjobs', to: "applieds#show"       #route to get applied jobs for seeker  
+  post '/:id/jobs/apply', to: "applieds#create"     #route to create applied job 
 end
 
 

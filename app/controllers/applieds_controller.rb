@@ -6,11 +6,11 @@ class AppliedsController < ApplicationController
     def index
         user = User.find(params["id"])
 
-        if user
+        if user && user['role'] == 'jobSeeker'
             jobs = Job.all
             render json: {status: 'SUCCESS', message: 'Loaded jobs For user', data:jobs},status: :ok
         else
-            render json: { status: 401 }
+            render json: { status: 'not authorized' }
         end
 
     end
@@ -18,7 +18,7 @@ class AppliedsController < ApplicationController
     #apply for job 
     def create
         user = User.find(params["id"])
-        if user
+        if user && user['role'] == 'jobSeeker'
         applied = Applied.new(apply_params)
         if applied.save
             render json: {status: 'SUCCESS', message:'Saved Applied Job', data:applied},status: :ok
@@ -26,16 +26,16 @@ class AppliedsController < ApplicationController
             render json: {status: 'ERROR', message:'Applied not saved', data:applied.errors},status: :unprocessable_entity
         end
     else
-        render json: { status: 401 }
+        render json: { status: 'not authorized' }
     end
     end
     
     #find applied jobs for specific user
-    def index
+    def show
         user = User.find(params[:id])
         # render json: {status: 'SUCCESS', message: 'Loaded jobs For user', data:user['id']},status: :ok
 
-        if user
+        if user && user['role'] == 'jobSeeker'
             userId = user['id']
             jobs = Applied.find_by(user_id: params[:id])
             jobname = Job.find(jobs["job_id"])
