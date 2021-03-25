@@ -36,13 +36,10 @@ class JobsController < ApplicationController
     #update job
     def update
         user = User.find(params["userid"])
-        if user && user['role'] == 'admin'
-        job = Job.find(params[:id])
-        if job.update_attributes(job_params)
+        if user && user["role"] == "admin"
+        job = Job.find_by(params["id"])
+        job.update_attributes(job_params)
             render json: {status: 'SUCCESS', message: 'Updated Job', data:job},status: :ok
-        else
-            render json: {status: 'ERROR', message:'Job not updated', data:job.errors},status: :unprocessable_entity
-        end
     else
         render json: { status: 'not authorized' }
     end
@@ -50,9 +47,14 @@ class JobsController < ApplicationController
     
     #delete one job
     def destroy
+        user = User.find(params["userid"])
+        if user && user["role"] == "admin"
         job = Job.find(params[:id])
         job.destroy
         render json: {status: 'SUCCESS', message:'Deleted Job', data:job},status: :ok
+        else
+            render json: { status: 'not authorized' }
+        end
 
     end
 
